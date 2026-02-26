@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Pick-Up — Pho Huong Viet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink:        #0d0b08;
+      --paper:      #f5f0e8;
+      --ember:      #c8421a;
+      --gold:       #d4a843;
+      --mist:       #8b8070;
+      --smoke:      #1e1a14;
+      --warm-white: #faf7f2;
+      --card:       #161210;
+      --border:     rgba(212,168,67,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Cormorant Garamond', serif; background: var(--ink); color: var(--paper); min-height: 100vh; }
+
+    /* ─── HEADER ─── */
+    header {
+      background: rgba(13,11,8,0.97); border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px);
+    }
+    .header-logo { font-family: 'Shippori Mincho', serif; font-size: 1.2rem; color: var(--gold); text-decoration: none; letter-spacing: 0.1em; }
+    .header-logo span { display: block; font-family: 'Cormorant Garamond', serif; font-size: 0.6rem; letter-spacing: 0.3em; color: var(--mist); }
+    .header-back { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); text-decoration: none; transition: color 0.2s; }
+    .header-back:hover { color: var(--gold); }
+
+    /* ─── PAGE ─── */
+    .page-wrap { max-width: 780px; margin: 0 auto; padding: 3rem 2rem 10rem; }
+
+    /* ─── STEPS ─── */
+    .steps { display: flex; align-items: center; margin-bottom: 3rem; }
+    .step { display: flex; align-items: center; gap: 0.6rem; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); }
+    .step.active { color: var(--gold); }
+    .step.done   { color: rgba(139,128,112,0.4); }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-family: 'Shippori Mincho', serif; flex-shrink: 0; }
+    .step.active .step-num { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+    .step.done   .step-num { background: rgba(139,128,112,0.15); }
+    .step-divider { flex: 1; height: 1px; background: var(--border); margin: 0 0.8rem; }
+
+    .section-heading { font-family: 'Shippori Mincho', serif; font-size: 1.5rem; color: var(--warm-white); margin-bottom: 0.4rem; }
+    .section-heading em { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold); }
+    .section-sub { font-size: 0.82rem; color: var(--mist); margin-bottom: 1.8rem; font-style: italic; }
+
+    /* ─── VIEWS ─── */
+    #stepMenu { display: block; }
+    #stepForm { display: none; }
+    #stepDone { display: none; }
+
+    /* ─── MENU ─── */
+    .category-label { font-size: 0.62rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--ember); padding: 1.8rem 0 0.8rem; border-top: 1px solid var(--border); margin-top: 0.5rem; }
+    .category-label:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+
+    .menu-card { background: var(--card); border: 1px solid transparent; padding: 1rem 1.2rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 2px; transition: border-color 0.2s, background 0.2s; }
+    .menu-card:hover    { border-color: var(--border); background: #1a1610; }
+    .menu-card.selected { border-color: rgba(212,168,67,0.35); background: #1c1a10; }
+    .menu-card-info { flex: 1; }
+    .menu-card-name { font-family: 'Shippori Mincho', serif; font-size: 0.98rem; color: var(--warm-white); margin-bottom: 0.15rem; }
+    .menu-card-desc { font-size: 0.75rem; color: var(--mist); font-style: italic; line-height: 1.5; }
+    .menu-card-price { font-size: 0.95rem; color: var(--gold); font-family: 'Shippori Mincho', serif; white-space: nowrap; margin-right: 0.8rem; }
+
+    .qty-control { display: flex; align-items: center; gap: 0.4rem; }
+    .qty-btn { width: 28px; height: 28px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--paper); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .qty-btn:hover { background: var(--ember); border-color: var(--ember); }
+    .qty-display { width: 26px; text-align: center; font-family: 'Shippori Mincho', serif; font-size: 1rem; color: var(--warm-white); }
+
+    /* ─── STICKY BAR ─── */
+    .summary-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--smoke); border-top: 1px solid var(--border);
+      padding: 1rem 2rem; display: flex; align-items: center;
+      justify-content: space-between; gap: 1rem; z-index: 40;
+      transform: translateY(100%); transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .summary-bar.visible { transform: translateY(0); }
+    .summary-bar-left { display: flex; align-items: center; gap: 1rem; }
+    .summary-bar-info { font-size: 0.85rem; color: var(--mist); }
+    .summary-bar-info strong { font-family: 'Shippori Mincho', serif; color: var(--warm-white); font-size: 1rem; }
+    .summary-bar-hint { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(139,128,112,0.5); margin-top: 0.1rem; }
+    .summary-bar-total { font-family: 'Shippori Mincho', serif; font-size: 1.2rem; color: var(--gold); }
+    .view-order-btn {
+      background: rgba(212,168,67,0.1); border: 1px solid rgba(212,168,67,0.3);
+      color: var(--gold); padding: 0.6rem 1.2rem;
+      font-family: 'Cormorant Garamond', serif; font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .view-order-btn:hover { background: rgba(212,168,67,0.2); }
+
+    /* ─── ORDER DRAWER (POPUP) ─── */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      z-index: 60; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+    .drawer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #121009; border-top: 1px solid var(--border);
+      z-index: 70; border-radius: 0;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      max-height: 85vh;
+      display: flex; flex-direction: column;
+    }
+    .drawer.open { transform: translateY(0); }
+
+    .drawer-handle {
+      width: 36px; height: 4px; background: rgba(212,168,67,0.2);
+      border-radius: 2px; margin: 0.8rem auto 0; flex-shrink: 0;
+    }
+
+    .drawer-header {
+      padding: 1rem 1.5rem 0.8rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+
+    .drawer-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.1rem; color: var(--warm-white);
+    }
+
+    .drawer-title span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; color: var(--mist);
+      margin-left: 0.5rem;
+    }
+
+    .drawer-close {
+      background: none; border: none; color: var(--mist);
+      font-size: 1.3rem; cursor: pointer; padding: 0.2rem 0.4rem;
+      transition: color 0.2s; line-height: 1;
+    }
+    .drawer-close:hover { color: var(--paper); }
+
+    /* Scrollable items area */
+    .drawer-body { overflow-y: auto; flex: 1; padding: 0.5rem 0; }
+
+    .drawer-empty {
+      text-align: center; padding: 3rem 2rem;
+      color: var(--mist); font-style: italic; font-size: 0.9rem;
+    }
+
+    /* Each item row in drawer */
+    .drawer-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid rgba(212,168,67,0.06);
+      transition: background 0.15s;
+    }
+    .drawer-item:hover { background: rgba(255,255,255,0.02); }
+    .drawer-item:last-child { border-bottom: none; }
+
+    .drawer-item-info { flex: 1; }
+    .drawer-item-name { font-family: 'Shippori Mincho', serif; font-size: 0.9rem; color: var(--warm-white); margin-bottom: 0.1rem; }
+    .drawer-item-unit { font-size: 0.75rem; color: var(--mist); font-style: italic; }
+
+    .drawer-item-subtotal {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.95rem; color: var(--gold);
+      white-space: nowrap; min-width: 52px; text-align: right;
+    }
+
+    /* Inline qty control inside drawer */
+    .drawer-qty { display: flex; align-items: center; gap: 0.35rem; }
+    .drawer-qty-btn {
+      width: 26px; height: 26px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      color: var(--paper); font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .drawer-qty-btn:hover { background: var(--ember); border-color: var(--ember); }
+    .drawer-qty-btn.remove-btn:hover { background: #7a1a0a; border-color: #7a1a0a; }
+    .drawer-qty-num {
+      width: 24px; text-align: center;
+      font-family: 'Shippori Mincho', serif; font-size: 0.95rem; color: var(--warm-white);
+    }
+
+    /* Footer of drawer */
+    .drawer-footer {
+      padding: 1rem 1.5rem 1.5rem;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      background: #121009;
+    }
+
+    .drawer-totals { margin-bottom: 1rem; }
+    .drawer-total-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.8rem; color: var(--mist); line-height: 2;
+    }
+    .drawer-total-row.grand {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.05rem; color: var(--warm-white);
+      border-top: 1px solid var(--border);
+      padding-top: 0.4rem; margin-top: 0.2rem;
+    }
+
+    .continue-btn {
+      width: 100%; background: var(--ember); color: white; border: none;
+      padding: 1rem; font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .continue-btn:hover { background: #a83414; }
+
+    /* ─── FORM ─── */
+    .form-back { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); cursor: pointer; margin-bottom: 2rem; background: none; border: none; transition: color 0.2s; padding: 0; }
+    .form-back:hover { color: var(--gold); }
+
+    .order-summary-box { background: var(--card); border: 1px solid var(--border); padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+    .order-summary-title { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ember); margin-bottom: 0.8rem; }
+    .order-summary-item { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--paper); line-height: 1.9; gap: 1rem; }
+    .order-summary-item span:last-child { color: var(--gold); font-family: 'Shippori Mincho', serif; white-space: nowrap; }
+    .order-summary-divider { border: none; border-top: 1px solid var(--border); margin: 0.6rem 0; }
+    .order-summary-total { display: flex; justify-content: space-between; font-family: 'Shippori Mincho', serif; font-size: 1.05rem; color: var(--warm-white); margin-top: 0.3rem; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.4rem; }
+    .form-input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--paper); padding: 0.7rem 0.9rem; font-family: 'Cormorant Garamond', serif; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+    .form-input:focus { border-color: rgba(212,168,67,0.5); }
+    .form-input::placeholder { color: rgba(139,128,112,0.35); }
+    .form-input.error { border-color: var(--ember); }
+    textarea.form-input { resize: vertical; min-height: 70px; }
+
+    .submit-btn { width: 100%; background: var(--ember); color: white; border: none; padding: 1.1rem; font-family: 'Cormorant Garamond', serif; font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+    .submit-btn:hover:not(:disabled) { background: #a83414; }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ─── CONFIRMATION ─── */
+    .confirmation { text-align: center; padding: 3rem 1rem; animation: fadeUp 0.5s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .confirm-icon    { font-size: 4rem; margin-bottom: 1.5rem; display: block; }
+    .confirm-title   { font-family: 'Shippori Mincho', serif; font-size: 2rem; color: var(--warm-white); margin-bottom: 0.5rem; }
+    .confirm-subtitle { font-size: 1.1rem; font-style: italic; color: var(--gold); margin-bottom: 1.5rem; }
+    .confirm-msg     { font-size: 0.95rem; color: var(--mist); line-height: 1.8; max-width: 460px; margin: 0 auto 2rem; }
+    .confirm-order-id { display: inline-block; background: var(--card); border: 1px solid var(--border); padding: 0.6rem 1.5rem; font-family: 'Shippori Mincho', serif; font-size: 0.85rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 2rem; }
+    .confirm-details { background: var(--card); border: 1px solid var(--border); padding: 1.5rem; text-align: left; max-width: 420px; margin: 0 auto 2rem; }
+    .confirm-details-title { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ember); margin-bottom: 1rem; }
+    .confirm-detail-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--mist); line-height: 2; gap: 1rem; }
+    .confirm-detail-row span:first-child { color: rgba(245,240,232,0.5); }
+    .new-order-btn { background: transparent; border: 1px solid var(--border); color: var(--paper); padding: 0.75rem 2rem; font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+    .new-order-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 0.4rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .page-wrap { padding: 2rem 1rem 10rem; }
+      .steps { display: none; }
+      .summary-bar { padding: 0.8rem 1rem; }
+      .drawer { max-height: 90vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="header-logo" href="index.html">PHO HUONG VIET<span>17 Ave SW · Calgary</span></a>
+    <a class="header-back" href="index.html">← Back to Home</a>
+  </header>
+
+  <div class="page-wrap">
+
+    <!-- Steps -->
+    <div class="steps">
+      <div class="step active" id="step1"><div class="step-num">1</div><span>Choose Items</span></div>
+      <div class="step-divider"></div>
+      <div class="step" id="step2"><div class="step-num">2</div><span>Your Details</span></div>
+      <div class="step-divider"></div>
+      <div class="step" id="step3"><div class="step-num">3</div><span>Confirmation</span></div>
+    </div>
+
+    <!-- STEP 1: Menu -->
+    <div id="stepMenu">
+      <h2 class="section-heading">Choose Your <em>Items</em></h2>
+      <p class="section-sub">Select what you'd like — adjust quantities with + and −</p>
+      <div id="menuList"><p style="color:var(--mist);font-style:italic;">Loading menu...</p></div>
+    </div>
+
+    <!-- STEP 2: Form -->
+    <div id="stepForm">
+      <button class="form-back" onclick="goToMenu()">← Back to Menu</button>
+      <h2 class="section-heading">Your <em>Details</em></h2>
+      <p class="section-sub">Almost done — fill in your info below</p>
+      <div class="order-summary-box">
+        <div class="order-summary-title">Your Order</div>
+        <div id="formSummaryItems"></div>
+        <hr class="order-summary-divider" />
+        <div class="order-summary-total">
+          <span>Total (incl. GST)</span>
+          <span id="formSummaryTotal">$0.00</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="custName">Full Name *</label>
+        <input class="form-input" type="text" id="custName" placeholder="e.g. John Nguyen" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="custPhone">Phone Number *</label>
+        <input class="form-input" type="tel" id="custPhone" placeholder="e.g. 403-555-0199" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="custEmail">Email Address *</label>
+        <input class="form-input" type="email" id="custEmail" placeholder="e.g. john@email.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="custNotes">Special Instructions <span style="color:rgba(139,128,112,0.5)">(optional)</span></label>
+        <textarea class="form-input" id="custNotes" placeholder="Allergies, spice level, extra sauces..."></textarea>
+      </div>
+      <button class="submit-btn" id="submitBtn" onclick="placeOrder()">Place Pick-Up Order</button>
+    </div>
+
+    <!-- STEP 3: Confirmation -->
+    <div id="stepDone">
+      <div class="confirmation">
+        <span class="confirm-icon">✅</span>
+        <div class="confirm-title">Order Placed!</div>
+        <div class="confirm-subtitle">Thank you, <span id="confirmName"></span>!</div>
+        <p class="confirm-msg">Your pick-up order has been received. We'll have it hot and ready in about <strong>15–20 minutes</strong>. Need to make changes? Give us a call.</p>
+        <div class="confirm-order-id" id="confirmOrderId"></div>
+        <div class="confirm-details">
+          <div class="confirm-details-title">Order Summary</div>
+          <div id="confirmItems"></div>
+          <hr class="order-summary-divider" />
+          <div class="confirm-detail-row">
+            <span>Total (incl. GST)</span>
+            <span id="confirmTotal" style="color:var(--gold);font-family:'Shippori Mincho',serif;"></span>
+          </div>
+          <hr class="order-summary-divider" style="margin-top:0.8rem;" />
+          <div class="confirm-detail-row" style="margin-top:0.4rem;">
+            <span>Pick-Up Address</span>
+            <span style="color:var(--paper);text-align:right;">#3855 17 Ave SW<br>Calgary, AB</span>
+          </div>
+          <div class="confirm-detail-row">
+            <span>Phone</span>
+            <span style="color:var(--paper);">(403) 686-3799</span>
+          </div>
+        </div>
+        <button class="new-order-btn" onclick="resetAll()">Place Another Order</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sticky bar — click to open drawer -->
+  <div class="summary-bar" id="summaryBar" onclick="openDrawer()">
+    <div class="summary-bar-left">
+      <div class="summary-bar-info">
+        <strong id="barItemCount">0 items</strong> selected
+        <div class="summary-bar-hint">Tap to view & edit your order</div>
+      </div>
+    </div>
+    <div class="summary-bar-total" id="barTotal">$0.00</div>
+    <button class="view-order-btn" onclick="openDrawer(); event.stopPropagation();">View Order ↑</button>
+  </div>
+
+  <!-- Overlay -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+  <!-- Order Drawer -->
+  <div class="drawer" id="orderDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-header">
+      <div class="drawer-title">
+        Your Order
+        <span id="drawerItemCount"></span>
+      </div>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+
+    <div class="drawer-body" id="drawerBody">
+      <div class="drawer-empty">No items added yet.</div>
+    </div>
+
+    <div class="drawer-footer">
+      <div class="drawer-totals">
+        <div class="drawer-total-row"><span>Subtotal</span><span id="drawerSubtotal">$0.00</span></div>
+        <div class="drawer-total-row"><span>GST (5%)</span><span id="drawerTax">$0.00</span></div>
+        <div class="drawer-total-row grand"><span>Total</span><span id="drawerTotal">$0.00</span></div>
+      </div>
+      <button class="continue-btn" onclick="closeDrawer(); goToForm();">Continue to Details →</button>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE   = 'http://localhost:3001/api';
+    let menu         = [];
+    let selections   = {}; // { itemId: qty }
+
+    // ─── Init ────────────────────────────────────────────────
+    async function init() {
+      try {
+        const res  = await fetch(`${API_BASE}/menu`);
+        const data = await res.json();
+        menu = data.items;
+        renderMenu(data.menu);
+      } catch (err) {
+        document.getElementById('menuList').innerHTML =
+          `<p style="color:var(--mist);font-style:italic;padding:2rem 0;">
+            Unable to load menu. Please make sure the API server is running.<br>
+            <small style="font-size:0.75rem;opacity:0.6;">${err.message}</small>
+          </p>`;
+      }
+    }
+
+    // ─── Render Menu ────────────────────────────────────────
+    function renderMenu(grouped) {
+      const list = document.getElementById('menuList');
+      list.innerHTML = '';
+      for (const [category, items] of Object.entries(grouped)) {
+        const label = document.createElement('div');
+        label.className = 'category-label';
+        label.textContent = category;
+        list.appendChild(label);
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'menu-card';
+          card.id = `card-${item.id}`;
+          card.innerHTML = `
+            <div class="menu-card-info">
+              <div class="menu-card-name">${item.name}</div>
+              <div class="menu-card-desc">${item.description}</div>
+            </div>
+            <div class="menu-card-price">$${item.price}</div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+              <div class="qty-display" id="qty-${item.id}">0</div>
+              <button class="qty-btn" onclick="changeQty(${item.id}, +1)">+</button>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+      }
+    }
+
+    // ─── Qty Logic ──────────────────────────────────────────
+    function changeQty(itemId, delta) {
+      const next = Math.max(0, (selections[itemId] || 0) + delta);
+      if (next === 0) delete selections[itemId]; else selections[itemId] = next;
+
+      // Update menu card
+      const qtyEl = document.getElementById(`qty-${itemId}`);
+      if (qtyEl) qtyEl.textContent = next;
+      const card = document.getElementById(`card-${itemId}`);
+      if (card) card.classList.toggle('selected', next > 0);
+
+      updateBar();
+
+      // If drawer is open, refresh it too
+      if (document.getElementById('orderDrawer').classList.contains('open')) {
+        renderDrawerItems();
+      }
+    }
+
+    // ─── Calculations ────────────────────────────────────────
+    function calcSubtotal() {
+      return Object.entries(selections).reduce((sum, [id, qty]) => {
+        const item = menu.find(m => m.id === Number(id));
+        return sum + (item ? item.price * qty : 0);
+      }, 0);
+    }
+
+    function calcTotal() {
+      return +(calcSubtotal() * 1.05).toFixed(2);
+    }
+
+    function totalQty() {
+      return Object.values(selections).reduce((s, q) => s + q, 0);
+    }
+
+    // ─── Sticky Bar ─────────────────────────────────────────
+    function updateBar() {
+      const count = totalQty();
+      const total = calcTotal();
+      document.getElementById('barItemCount').textContent = `${count} item${count !== 1 ? 's' : ''}`;
+      document.getElementById('barTotal').textContent     = `$${total.toFixed(2)}`;
+      document.getElementById('summaryBar').classList.toggle('visible', count > 0);
+    }
+
+    // ─── Drawer ─────────────────────────────────────────────
+    function openDrawer() {
+      if (!totalQty()) return;
+      renderDrawerItems();
+      document.getElementById('orderDrawer').classList.add('open');
+      document.getElementById('drawerOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      document.getElementById('orderDrawer').classList.remove('open');
+      document.getElementById('drawerOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function renderDrawerItems() {
+      const body = document.getElementById('drawerBody');
+      const ids  = Object.keys(selections).map(Number);
+
+      if (ids.length === 0) {
+        body.innerHTML = '<div class="drawer-empty">No items added yet.</div>';
+        updateDrawerTotals();
+        return;
+      }
+
+      body.innerHTML = '';
+      ids.forEach(id => {
+        const item = menu.find(m => m.id === id);
+        if (!item) return;
+        const qty      = selections[id];
+        const subtotal = (item.price * qty).toFixed(2);
+
+        const row = document.createElement('div');
+        row.className = 'drawer-item';
+        row.id = `drawer-row-${id}`;
+        row.innerHTML = `
+          <div class="drawer-item-info">
+            <div class="drawer-item-name">${item.name}</div>
+            <div class="drawer-item-unit">$${item.price.toFixed(2)} each</div>
+          </div>
+          <div class="drawer-qty">
+            <button class="drawer-qty-btn remove-btn" onclick="drawerChangeQty(${id}, -1)" title="${qty === 1 ? 'Remove' : 'Decrease'}">
+              ${qty === 1 ? '🗑' : '−'}
+            </button>
+            <div class="drawer-qty-num" id="drawer-qty-${id}">${qty}</div>
+            <button class="drawer-qty-btn" onclick="drawerChangeQty(${id}, +1)">+</button>
+          </div>
+          <div class="drawer-item-subtotal">$${subtotal}</div>
+        `;
+        body.appendChild(row);
+      });
+
+      updateDrawerTotals();
+
+      const count = totalQty();
+      document.getElementById('drawerItemCount').textContent =
+        `${count} item${count !== 1 ? 's' : ''}`;
+    }
+
+    function updateDrawerTotals() {
+      const sub   = calcSubtotal();
+      const tax   = +(sub * 0.05).toFixed(2);
+      const total = +(sub + tax).toFixed(2);
+      document.getElementById('drawerSubtotal').textContent = `$${sub.toFixed(2)}`;
+      document.getElementById('drawerTax').textContent      = `$${tax.toFixed(2)}`;
+      document.getElementById('drawerTotal').textContent    = `$${total.toFixed(2)}`;
+    }
+
+    // qty change triggered from inside the drawer
+    function drawerChangeQty(itemId, delta) {
+      changeQty(itemId, delta); // reuses main logic + updates menu card
+
+      // if last item was removed and cart is empty, close drawer
+      if (totalQty() === 0) {
+        closeDrawer();
+        return;
+      }
+
+      // re-render the drawer
+      renderDrawerItems();
+    }
+
+    // ─── Navigation ─────────────────────────────────────────
+    function goToForm() {
+      if (!Object.keys(selections).length) return;
+
+      const el = document.getElementById('formSummaryItems');
+      el.innerHTML = '';
+      Object.entries(selections).forEach(([id, qty]) => {
+        const item = menu.find(m => m.id === Number(id));
+        if (!item) return;
+        const row = document.createElement('div');
+        row.className = 'order-summary-item';
+        row.innerHTML = `<span>${item.name} ×${qty}</span><span>$${(item.price * qty).toFixed(2)}</span>`;
+        el.appendChild(row);
+      });
+      document.getElementById('formSummaryTotal').textContent = `$${calcTotal().toFixed(2)}`;
+
+      document.getElementById('stepMenu').style.display = 'none';
+      document.getElementById('summaryBar').classList.remove('visible');
+      document.getElementById('stepForm').style.display = 'block';
+      document.getElementById('step1').className = 'step done';
+      document.getElementById('step2').className = 'step active';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToMenu() {
+      document.getElementById('stepForm').style.display = 'none';
+      document.getElementById('stepMenu').style.display = 'block';
+      document.getElementById('step2').className = 'step';
+      document.getElementById('step1').className = 'step active';
+      updateBar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ─── Place Order ────────────────────────────────────────
+    async function placeOrder() {
+      const name  = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const email = document.getElementById('custEmail').value.trim();
+      const notes = document.getElementById('custNotes').value.trim();
+
+      let valid = true;
+      ['custName','custPhone','custEmail'].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.remove('error');
+        if (!el.value.trim()) { el.classList.add('error'); valid = false; }
+      });
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('custEmail').classList.add('error');
+        valid = false;
+      }
+      if (!valid) return;
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Placing Order...';
+
+      try {
+        const res  = await fetch(`${API_BASE}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customer: { name, phone, email },
+            items: Object.entries(selections).map(([id, qty]) => ({ id: Number(id), qty })),
+            notes,
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          showConfirmation(data.order, name);
+        } else {
+          alert(data.errors ? data.errors.join('\n') : 'Something went wrong. Please call (403) 686-3799.');
+          btn.disabled = false;
+          btn.innerHTML = 'Place Pick-Up Order';
+        }
+      } catch {
+        alert('Could not reach the order system. Please call us at (403) 686-3799.');
+        btn.disabled = false;
+        btn.innerHTML = 'Place Pick-Up Order';
+      }
+    }
+
+    // ─── Confirmation ────────────────────────────────────────
+    function showConfirmation(order, name) {
+      document.getElementById('confirmName').textContent    = name;
+      document.getElementById('confirmOrderId').textContent = `Order ID: ${order.order_id}`;
+      document.getElementById('confirmTotal').textContent   = `$${order.pricing.total.toFixed(2)}`;
+
+      const el = document.getElementById('confirmItems');
+      el.innerHTML = '';
+      order.items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'confirm-detail-row';
+        row.innerHTML = `<span>${item.name} ×${item.qty}</span><span style="color:var(--gold);font-family:'Shippori Mincho',serif;">$${item.subtotal.toFixed(2)}</span>`;
+        el.appendChild(row);
+      });
+
+      document.getElementById('stepForm').style.display = 'none';
+      document.getElementById('stepDone').style.display = 'block';
+      document.getElementById('step2').className = 'step done';
+      document.getElementById('step3').className = 'step active';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ─── Reset ───────────────────────────────────────────────
+    function resetAll() {
+      selections = {};
+      ['custName','custPhone','custEmail','custNotes'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').innerHTML = 'Place Pick-Up Order';
+      document.getElementById('step1').className = 'step active';
+      document.getElementById('step2').className = 'step';
+      document.getElementById('step3').className = 'step';
+      menu.forEach(item => {
+        const q = document.getElementById(`qty-${item.id}`);
+        const c = document.getElementById(`card-${item.id}`);
+        if (q) q.textContent = '0';
+        if (c) c.classList.remove('selected');
+      });
+      document.getElementById('stepDone').style.display = 'none';
+      document.getElementById('stepMenu').style.display = 'block';
+      updateBar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Close drawer on swipe down
+    let touchStartY = 0;
+    document.getElementById('orderDrawer').addEventListener('touchstart', e => {
+      touchStartY = e.touches[0].clientY;
+    });
+    document.getElementById('orderDrawer').addEventListener('touchend', e => {
+      if (e.changedTouches[0].clientY - touchStartY > 60) closeDrawer();
+    });
+
+    init();
+  </script>
+</body>
+</html>
