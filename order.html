@@ -269,7 +269,7 @@
 
   <header>
     <a class="header-logo" href="index.html">PHO HUONG VIET<span>17 Ave SW · Calgary</span></a>
-    <a class="header-back" href="index.html">← Back to Home</a>
+    <a class="header-back" href="/">← Back to Home</a>
   </header>
 
   <div class="page-wrap">
@@ -396,7 +396,8 @@
   </div>
 
   <script>
-    const API_BASE   = 'http://localhost:3001/api';
+    // ── After deploying restaurant-api to Railway, replace the URL below ──
+    const API_BASE   = '__RESTAURANT_API_URL__';
     let menu         = [];
     let selections   = {}; // { itemId: qty }
 

@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pho Huong Viet — Authentic Vietnamese in Calgary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink: #0d0b08;
+      --paper: #f5f0e8;
+      --ember: #c8421a;
+      --gold: #d4a843;
+      --mist: #8b8070;
+      --smoke: #1e1a14;
+      --warm-white: #faf7f2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: var(--ink);
+      color: var(--paper);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(13,11,8,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(212,168,67,0.15);
+      transition: padding 0.3s;
+    }
+
+    .nav-logo {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--mist);
+      font-weight: 300;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--paper);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--ember);
+      color: white !important;
+      padding: 0.55rem 1.4rem;
+      font-size: 0.7rem !important;
+      letter-spacing: 0.2em !important;
+      transition: background 0.3s !important;
+    }
+
+    .nav-cta:hover { background: transparent !important; color: var(--ember) !important; border: 1px solid var(--ember); }
+
+    .nav-phone {
+      font-size: 0.75rem;
+      color: var(--mist);
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,66,26,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(212,168,67,0.06) 0%, transparent 60%),
+        linear-gradient(170deg, #0d0b08 0%, #1a1209 50%, #0a0907 100%);
+    }
+
+    /* Animated steam circles */
+    .smoke-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(212,168,67,0.08);
+      animation: expand 8s ease-out infinite;
+    }
+
+    .smoke-ring:nth-child(1) { width: 200px; height: 200px; top: 40%; left: 45%; animation-delay: 0s; }
+    .smoke-ring:nth-child(2) { width: 400px; height: 400px; top: 30%; left: 35%; animation-delay: 2s; }
+    .smoke-ring:nth-child(3) { width: 700px; height: 700px; top: 15%; left: 22%; animation-delay: 4s; }
+
+    @keyframes expand {
+      0%   { transform: scale(0.8); opacity: 0; }
+      30%  { opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .hero-watermark {
+      position: absolute;
+      right: 4%;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4.5vw, 4rem);
+      font-weight: 300;
+      font-style: italic;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(212,168,67,0.22);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 0.35em;
+      pointer-events: none;
+      user-select: none;
+      line-height: 1.2;
+      text-shadow: 0 0 40px rgba(212,168,67,0.07);
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      padding: 0 2rem;
+      animation: fadeUp 1.2s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1.2s 0.2s ease both;
+      opacity: 0;
+    }
+
+    .hero-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+      animation: fadeUp 1.2s 0.4s ease both;
+      opacity: 0;
+    }
+
+    .hero-title-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.6rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 0.3em;
+      display: block;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1.2s 0.6s ease both;
+      opacity: 0;
+    }
+
+    .hero-desc {
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
+      font-style: italic;
+      color: var(--mist);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+      font-weight: 300;
+      animation: fadeUp 1.2s 0.8s ease both;
+      opacity: 0;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 1.2s 1s ease both;
+      opacity: 0;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--ember);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #a83414;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--paper);
+      border: 1px solid rgba(245,240,232,0.3);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeUp 1.2s 1.4s ease both;
+      opacity: 0;
+    }
+
+    .hero-scroll span {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--mist);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      background: var(--smoke);
+      padding: 7rem 3rem;
+    }
+
+    .about-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-images {
+      position: relative;
+      height: 520px;
+    }
+
+    .about-img {
+      position: absolute;
+      border-radius: 2px;
+      overflow: hidden;
+      background: #2a221a;
+    }
+
+    .about-img-1 {
+      width: 72%;
+      height: 75%;
+      top: 0; left: 0;
+    }
+
+    .about-img-2 {
+      width: 55%;
+      height: 55%;
+      bottom: 0; right: 0;
+      border: 3px solid var(--smoke);
+    }
+
+    .about-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: sepia(30%) saturate(0.8);
+      transition: transform 0.6s;
+    }
+
+    .about-img:hover img { transform: scale(1.04); }
+
+    .img-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1e1a14, #2d2416);
+      color: var(--mist);
+      font-size: 3rem;
+    }
+
+    .about-text {
+      padding: 2rem 0;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      color: var(--warm-white);
+    }
+
+    .section-title em {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--mist);
+      margin-bottom: 1.2rem;
+      font-weight: 300;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(212,168,67,0.15);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-top: 0.3rem;
+    }
+
+    /* ─── MENU HIGHLIGHTS ─── */
+    #menu {
+      padding: 7rem 3rem;
+      background: var(--ink);
+      position: relative;
+    }
+
+    .menu-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .menu-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .menu-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      cursor: pointer;
+    }
+
+    .menu-item-bg {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1e1a14, #2d2416);
+      transition: transform 0.5s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-item:hover .menu-item-bg { transform: scale(1.06); }
+
+    .menu-item-emoji {
+      font-size: 4rem;
+      opacity: 0.4;
+    }
+
+    .menu-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,11,8,0.95) 0%, transparent 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+    }
+
+    .menu-item-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .menu-item-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.3rem;
+      color: var(--warm-white);
+      margin-bottom: 0.3rem;
+    }
+
+    .menu-item-desc {
+      font-size: 0.8rem;
+      color: var(--mist);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .menu-item-price {
+      font-size: 1rem;
+      color: var(--ember);
+      margin-top: 0.5rem;
+    }
+
+    /* ─── DELIVERY ─── */
+    #delivery {
+      background: var(--smoke);
+      padding: 6rem 3rem;
+    }
+
+    .delivery-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .delivery-cards {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .delivery-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(212,168,67,0.15);
+      padding: 2rem 2.5rem;
+      flex: 1;
+      min-width: 200px;
+      max-width: 280px;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: var(--paper);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .delivery-card:hover {
+      border-color: var(--gold);
+      background: rgba(212,168,67,0.05);
+      transform: translateY(-4px);
+    }
+
+    .delivery-card-icon { font-size: 2rem; }
+
+    .delivery-card-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.1rem;
+      color: var(--warm-white);
+    }
+
+    .delivery-card-btn {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ember);
+      border-bottom: 1px solid rgba(200,66,26,0.4);
+      padding-bottom: 2px;
+    }
+
+    /* ─── PICKUP ─── */
+    #pickup {
+      background: var(--ink);
+      padding: 6rem 3rem;
+    }
+
+    .pickup-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .pickup-steps { counter-reset: steps; }
+
+    .pickup-step {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .step-num {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2rem;
+      color: rgba(212,168,67,0.25);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 2rem;
+    }
+
+    .step-text h4 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.1rem;
+      color: var(--warm-white);
+      margin-bottom: 0.3rem;
+    }
+
+    .step-text p {
+      font-size: 0.9rem;
+      color: var(--mist);
+      line-height: 1.6;
+    }
+
+    .step-text strong { color: var(--gold); }
+
+    /* ─── REVIEWS ─── */
+    #reviews {
+      background: var(--smoke);
+      padding: 7rem 3rem;
+    }
+
+    .reviews-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .reviews-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .review-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(212,168,67,0.1);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .review-card::before {
+      content: '\201C';
+      font-family: 'Shippori Mincho', serif;
+      font-size: 5rem;
+      color: rgba(200,66,26,0.15);
+      position: absolute;
+      top: -0.5rem;
+      left: 1.5rem;
+      line-height: 1;
+    }
+
+    .review-text {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(245,240,232,0.7);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .review-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--ember), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-family: 'Shippori Mincho', serif;
+      color: white;
+    }
+
+    .review-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.95rem;
+      color: var(--warm-white);
+    }
+
+    .review-stars {
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+
+    /* ─── GALLERY ─── */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      background: var(--ink);
+    }
+
+    .gallery-item {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #1e1a14, #2d2416);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover { opacity: 1; }
+
+    .gallery-item:nth-child(1) { background: linear-gradient(135deg, #1a1008, #2a1a0a); }
+    .gallery-item:nth-child(2) { background: linear-gradient(135deg, #1a0d0d, #2d1a1a); }
+    .gallery-item:nth-child(3) { background: linear-gradient(135deg, #1a1208, #2d2010); }
+    .gallery-item:nth-child(4) { background: linear-gradient(135deg, #0d1a0d, #1a2d1a); }
+    .gallery-item:nth-child(5) { background: linear-gradient(135deg, #1a0a08, #2d1510); }
+
+    /* ─── CONTACT / FOOTER ─── */
+    #contact {
+      background: #080704;
+      padding: 6rem 3rem 3rem;
+    }
+
+    .contact-top {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 4rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid rgba(212,168,67,0.1);
+    }
+
+    .contact-brand {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-brand-sub {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--mist);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .contact-about {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--mist);
+      max-width: 320px;
+    }
+
+    .contact-heading {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem;
+      color: var(--warm-white);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.1em;
+    }
+
+    .contact-info {
+      list-style: none;
+    }
+
+    .contact-info li {
+      font-size: 0.85rem;
+      color: var(--mist);
+      line-height: 1.9;
+    }
+
+    .contact-info a {
+      color: var(--mist);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .contact-info a:hover { color: var(--gold); }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--mist);
+      line-height: 2;
+    }
+
+    .hours-row .day { color: rgba(245,240,232,0.5); }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 2.5rem auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: rgba(139,128,112,0.5);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-bottom a {
+      color: rgba(139,128,112,0.5);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-bottom a:hover { color: var(--gold); }
+
+    /* ─── ANNOUNCEMENT BANNER ─── */
+    .banner {
+      background: var(--ember);
+      text-align: center;
+      padding: 0.7rem 2rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+      position: relative;
+      z-index: 99;
+    }
+
+    /* ─── SCROLL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .about-grid, .pickup-inner, .contact-top { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-images { height: 320px; }
+      .menu-grid { grid-template-columns: 1fr 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .gallery { grid-template-columns: repeat(3, 1fr); }
+      #about, #menu, #delivery, #pickup, #reviews, #contact { padding: 4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Banner -->
+  <div class="banner">⚑ Now open for dine-in · Reservations recommended on weekends</div>
+
+  <!-- Nav -->
+  <nav>
+    <a class="nav-logo" href="#">
+      PHO HUONG VIET
+      <span>Vietnamese Restaurant · Calgary</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#delivery">Delivery</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:1.2rem;">
+      <span class="nav-phone">📞 (403) 686 3799</span>
+      <a class="btn btn-primary nav-cta" href="/order.html">Order Pick-Up</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="smoke-ring"></div>
+      <div class="smoke-ring"></div>
+      <div class="smoke-ring"></div>
+    </div>
+    <div class="hero-watermark">Real Vietnamese Taste</div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Authentic Vietnamese Cuisine · Est. 20+ Years · Calgary</p>
+      <h1 class="hero-title">PHO<br>HUONG VIET</h1>
+      <span class="hero-title-sub">The taste of Vietnam, right here in Calgary</span>
+      <p class="hero-desc">Where the broth simmers for hours, the herbs are always fresh, and every bowl carries the warmth of a home-cooked meal from the streets of Saigon.</p>
+      <div class="hero-btns">
+        <a class="btn btn-primary" href="#menu">View Menu</a>
+        <a class="btn btn-outline" href="#delivery">Order Delivery</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="about-grid reveal">
+      <div class="about-images">
+        <div class="about-img about-img-1">
+          <div class="img-placeholder">🍜</div>
+        </div>
+        <div class="about-img about-img-2">
+          <div class="img-placeholder">🌿</div>
+        </div>
+      </div>
+      <div class="about-text">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">A Taste of <em>Vietnam</em><br>in the Heart of Calgary</h2>
+        <p>Located at 17 Ave SW, Pho Huong Viet has been one of Calgary's most beloved Vietnamese restaurants for over 20 years. We serve the food that warms the soul — steaming bowls of pho, fresh vermicelli, grilled meats, and vibrant stir-fries made with the freshest ingredients.</p>
+        <p>Every dish honours the Vietnamese tradition of balance — fragrant broths built over hours, bright herbs and aromatics, and the kind of home-kitchen care that no shortcut can replicate. A taste you will notice.</p>
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-num">20+</div>
+            <div class="stat-label">Years Open</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">80+</div>
+            <div class="stat-label">Menu Items</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">4.8★</div>
+            <div class="stat-label">Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Highlights -->
+  <section id="menu">
+    <div class="menu-header reveal">
+      <p class="section-label">Featured Dishes</p>
+      <h2 class="section-title" style="color:var(--warm-white);">Must-Try <em>Signatures</em></h2>
+    </div>
+    <div class="menu-grid reveal">
+
+      <div class="menu-item">
+        <div class="menu-item-bg"><span class="menu-item-emoji">🍜</span></div>
+        <div class="menu-item-overlay">
+          <div class="menu-item-tag">Noodle Soup · Pho</div>
+          <div class="menu-item-name">Pho Dac Biet</div>
+          <div class="menu-item-desc">House special pho — rich slow-simmered beef broth, rare steak, brisket, tendon & tripe</div>
+          <div class="menu-item-price">$17</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-bg" style="background:linear-gradient(135deg,#1a0d0a,#2d1a12)"><span class="menu-item-emoji">🥩</span></div>
+        <div class="menu-item-overlay">
+          <div class="menu-item-tag">Rice Plate · Com</div>
+          <div class="menu-item-name">Grilled Beef Lemon</div>
+          <div class="menu-item-desc">Tender lemongrass-marinated beef over steamed jasmine rice with pickled vegetables</div>
+          <div class="menu-item-price">$16</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-bg" style="background:linear-gradient(135deg,#0a1a18,#122d28)"><span class="menu-item-emoji">🥗</span></div>
+        <div class="menu-item-overlay">
+          <div class="menu-item-tag">Vermicelli · Bun</div>
+          <div class="menu-item-name">Bun Bo Hue</div>
+          <div class="menu-item-desc">Spicy central Vietnamese beef noodle soup, lemongrass broth, thick round noodles</div>
+          <div class="menu-item-price">$16</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-bg" style="background:linear-gradient(135deg,#1a1208,#2d2010)"><span class="menu-item-emoji">🌮</span></div>
+        <div class="menu-item-overlay">
+          <div class="menu-item-tag">Sandwich · Banh Mi</div>
+          <div class="menu-item-name">Sate Chicken Sub</div>
+          <div class="menu-item-desc">Crispy baguette, spicy sate chicken, fresh cucumber, cilantro & pickled daikon</div>
+          <div class="menu-item-price">$10</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-bg" style="background:linear-gradient(135deg,#1a0a0a,#2d1212)"><span class="menu-item-emoji">🥦</span></div>
+        <div class="menu-item-overlay">
+          <div class="menu-item-tag">Stir Fry · Xao</div>
+          <div class="menu-item-name">Tofu & Egg Noodles</div>
+          <div class="menu-item-desc">Stir-fried seasonal vegetables and crispy tofu on silky egg noodles, oyster sauce glaze</div>
+          <div class="menu-item-price">$15</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-bg" style="background:linear-gradient(135deg,#080d1a,#101a2d)"><span class="menu-item-emoji">🧋</span></div>
+        <div class="menu-item-overlay">
+          <div class="menu-item-tag">Drinks · Do Uong</div>
+          <div class="menu-item-name">Vietnamese Iced Coffee</div>
+          <div class="menu-item-desc">Strong drip coffee over sweetened condensed milk and ice — the classic ca phe sua da</div>
+          <div class="menu-item-price">$5</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Delivery -->
+  <section id="delivery">
+    <div class="delivery-inner reveal">
+      <p class="section-label">Order In</p>
+      <h2 class="section-title" style="color:var(--warm-white);">Choose Your <em>Delivery</em></h2>
+      <p style="color:var(--mist);font-size:1rem;margin-top:0.8rem;">Brought to your door, still steaming. Use our delivery partners below.</p>
+      <div class="delivery-cards">
+        <a class="delivery-card" href="https://www.skipthedishes.com/pho-huong-viet">
+          <div class="delivery-card-icon">🏃</div>
+          <div class="delivery-card-name">Skip The Dishes</div>
+          <div class="delivery-card-btn">Order Now →</div>
+        </a>
+        <a class="delivery-card" href="https://www.doordash.com/store/pho-huong-viet-calgary-567238">
+          <div class="delivery-card-icon">🚗</div>
+          <div class="delivery-card-name">DoorDash</div>
+          <div class="delivery-card-btn">Order Now →</div>
+        </a>
+        <a class="delivery-card" href="#">
+          <div class="delivery-card-icon">🛵</div>
+          <div class="delivery-card-name">Uber Eats</div>
+          <div class="delivery-card-btn">Order Now →</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pick Up -->
+  <section id="pickup">
+    <div class="pickup-inner reveal">
+      <div>
+        <p class="section-label">Pick-Up</p>
+        <h2 class="section-title">Skip the Wait,<br><em>Order Ahead</em></h2>
+        <a class="btn btn-primary" href="/order.html" style="margin-top:2rem;display:inline-block;">Order Pick-Up Online</a>
+      </div>
+      <div class="pickup-steps">
+        <div class="pickup-step">
+          <div class="step-num">01</div>
+          <div class="step-text">
+            <h4>Place Your Order</h4>
+            <p>Browse our full menu and order online. If you have any allergies, please leave a note in the <strong>Special Instructions</strong> field.</p>
+          </div>
+        </div>
+        <div class="pickup-step">
+          <div class="step-num">02</div>
+          <div class="step-text">
+            <h4>We Confirm Your Order</h4>
+            <p>You'll receive a confirmation once your order is accepted along with an estimated pickup time.</p>
+          </div>
+        </div>
+        <div class="pickup-step">
+          <div class="step-num">03</div>
+          <div class="step-text">
+            <h4>Arrive & Collect</h4>
+            <p>Head to our pickup counter at 17 Ave SW. Need to make changes? Call us at <strong>(403) 686 3799</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section id="reviews">
+    <div class="reviews-header reveal">
+      <p class="section-label">What Guests Say</p>
+      <h2 class="section-title" style="color:var(--warm-white);">Stories Over <em>Pho</em></h2>
+    </div>
+    <div class="reviews-grid reveal">
+      <div class="review-card">
+        <p class="review-text">My family has been coming to this restaurant for many years now. Our favourites are definitely the Pho Noodles! All their dishes are equally sumptuous. Sometimes we wait a bit longer during peak hours but it's worth every minute when the food arrives — hot, delicious, and appetizing!</p>
+        <div class="review-author">
+          <div class="review-avatar">A</div>
+          <div>
+            <div class="review-name">Alice Woo</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <p class="review-text">Good food, great value. I recommend the papaya salad. Went with my husband for brunch and it was awesome. The portions are generous and the flavours are always fresh and bright. A reliable spot we keep coming back to.</p>
+        <div class="review-author">
+          <div class="review-avatar">P</div>
+          <div>
+            <div class="review-name">Poh Wah Lee</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <p class="review-text">Pho Huong Viet offers an authentic Vietnamese experience. The Pho Dac Biet was exceptional — rich broth, tender beef, and perfectly cooked noodles. The ambiance was cozy and the staff were friendly. A must-visit for pho lovers in Calgary.</p>
+        <div class="review-author">
+          <div class="review-avatar">A</div>
+          <div>
+            <div class="review-name">Andrew Le</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Strip -->
+  <div class="gallery">
+    <div class="gallery-item">🍜</div>
+    <div class="gallery-item">🌿</div>
+    <div class="gallery-item">🥢</div>
+    <div class="gallery-item">🍋</div>
+    <div class="gallery-item">🔥</div>
+  </div>
+
+  <!-- Contact & Footer -->
+  <footer id="contact">
+    <div class="contact-top reveal">
+      <div>
+        <div class="contact-brand">PHO HUONG VIET</div>
+        <div class="contact-brand-sub">Authentic Vietnamese · Calgary, AB</div>
+        <p class="contact-about">A warm corner on 17 Ave SW, glowing with the aroma of slow-simmered broth and the spirit of Vietnamese home cooking. Come for the pho. Stay for the bun. Return for everything else.</p>
+        <div style="margin-top:1.5rem;">
+          <a href="https://www.instagram.com/pho.huongviet/" style="color:var(--mist);font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;">Instagram</a>
+        </div>
+      </div>
+      <div>
+        <h3 class="contact-heading">Find Us</h3>
+        <ul class="contact-info">
+          <li><a href="tel:+14036863799">(403) 686 3799</a></li>
+          <li><a href="https://maps.app.goo.gl/K1UTBKyfwU7XLWN98">#3855 17 Ave SW, Calgary, AB T3C 1J7</a></li>
+          <li style="margin-top:0.8rem;"><a href="https://maps.app.goo.gl/K1UTBKyfwU7XLWN98" style="color:var(--ember);">Get Directions →</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="contact-heading">Hours</h3>
+        <div class="hours-row"><span class="day">Monday</span><span>11am – 4pm</span></div>
+        <div class="hours-row"><span class="day">Tuesday</span><span>11am – 9pm</span></div>
+        <div class="hours-row"><span class="day">Wednesday</span><span>11am – 9pm</span></div>
+        <div class="hours-row"><span class="day">Thursday</span><span>11am – 9pm</span></div>
+        <div class="hours-row"><span class="day">Friday</span><span>11am – 9pm</span></div>
+        <div class="hours-row"><span class="day">Saturday</span><span>11am – 9pm</span></div>
+        <div class="hours-row"><span class="day">Sunday</span><span>11am – 9pm</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Pho Huong Viet. All rights reserved.</span>
+      <span>Made with care in Calgary 🍜</span>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Animated counters
+    function animateCounter(el, target, suffix = '') {
+      let start = 0;
+      const duration = 1800;
+      const step = target / (duration / 16);
+      const timer = setInterval(() => {
+        start += step;
+        if (start >= target) { start = target; clearInterval(timer); }
+        el.textContent = Math.floor(start) + suffix;
+      }, 16);
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const nums = e.target.querySelectorAll('.stat-num');
+          if (nums[0]) animateCounter(nums[0], 20, '+');
+          if (nums[1]) animateCounter(nums[1], 80, '+');
+          if (nums[2]) { setTimeout(() => { nums[2].textContent = '4.8★'; }, 900); nums[2].textContent = '...'; }
+          statsObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    const statsRow = document.querySelector('.stats-row');
+    if (statsRow) statsObserver.observe(statsRow);
+  </script>
+</body>
+</html>
