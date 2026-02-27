@@ -816,16 +816,59 @@
       transform: translateY(0);
     }
 
+    /* ─── HAMBURGER MENU ─── */
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:0.4rem; background:none; border:none; }
+    .nav-hamburger span { display:block; width:26px; height:2px; background:var(--paper); transition:all 0.3s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(13,11,8,0.98); z-index:90; flex-direction:column; align-items:center; justify-content:center; gap:2.5rem; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a { font-family:'Shippori Mincho',serif; font-size:1.9rem; color:var(--paper); text-decoration:none; letter-spacing:0.08em; transition:color 0.2s; }
+    .mobile-menu a:hover { color:var(--gold); }
+    .mobile-menu .mobile-cta { background:var(--ember); color:white !important; padding:0.9rem 2.5rem; font-family:'Cormorant Garamond',serif; font-size:0.9rem !important; letter-spacing:0.2em; }
+    .mobile-menu-close { position:absolute; top:1.2rem; right:1.2rem; background:none; border:none; color:var(--mist); font-size:2rem; cursor:pointer; line-height:1; padding:0.3rem; }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
-      nav { padding: 1rem 1.5rem; }
+      html { font-size: 17px; }
+      nav { padding: 1rem 1.25rem; }
       .nav-links { display: none; }
-      .about-grid, .pickup-inner, .contact-top { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-images { height: 320px; }
+      .nav-phone { display: none; }
+      .nav-hamburger { display: flex; }
+      .about-grid, .pickup-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-top { grid-template-columns: 1fr; gap: 2rem; }
+      .about-images { height: 280px; }
       .menu-grid { grid-template-columns: 1fr 1fr; }
       .reviews-grid { grid-template-columns: 1fr; }
       .gallery { grid-template-columns: repeat(3, 1fr); }
-      #about, #menu, #delivery, #pickup, #reviews, #contact { padding: 4rem 1.5rem; }
+      #about, #menu, #delivery, #pickup, #reviews { padding: 4rem 1.25rem; }
+      #contact { padding: 4rem 1.25rem 2rem; }
+      .hero-watermark { display: none; }
+      .delivery-cards { flex-direction: column; align-items: center; }
+      .delivery-card { min-width: 0; width: 100%; max-width: 360px; }
+      .stats-row { gap: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      html { font-size: 16px; }
+      .hero-title { font-size: clamp(2.8rem, 14vw, 5rem); }
+      .hero-btns { flex-direction: column; align-items: center; gap: 0.75rem; }
+      .hero-btns .btn { width: 100%; max-width: 280px; text-align: center; padding: 1rem; font-size: 0.82rem; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-item { aspect-ratio: 4/3; }
+      .gallery { grid-template-columns: repeat(3, 1fr); }
+      .review-card { padding: 1.5rem; }
+      .contact-top { gap: 1.5rem; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .banner { font-size: 0.7rem; padding: 0.65rem 1rem; }
+      .section-title { font-size: clamp(1.7rem, 7vw, 2.5rem); }
+      .contact-brand { font-size: 1.4rem; }
+      .hours-row { font-size: 0.88rem; }
+      .review-text { font-size: 1rem; }
+      .about-text p { font-size: 1.05rem; }
+      .step-text p { font-size: 0.92rem; }
     }
   </style>
 </head>
@@ -833,6 +876,17 @@
 
   <!-- Announcement Banner -->
   <div class="banner">⚑ Now open for dine-in · Reservations recommended on weekends</div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="toggleMenu()">✕</button>
+    <a href="#about" onclick="toggleMenu()">About</a>
+    <a href="#menu" onclick="toggleMenu()">Menu</a>
+    <a href="#delivery" onclick="toggleMenu()">Delivery</a>
+    <a href="#contact" onclick="toggleMenu()">Contact</a>
+    <a class="mobile-cta" href="/order.html">Order Pick-Up</a>
+    <span style="font-size:0.75rem;color:var(--mist);letter-spacing:0.15em;">📞 (403) 686 3799</span>
+  </div>
 
   <!-- Nav -->
   <nav>
@@ -850,6 +904,9 @@
     <div style="display:flex;align-items:center;gap:1.2rem;">
       <span class="nav-phone">📞 (403) 686 3799</span>
       <a class="btn btn-primary nav-cta" href="/order.html">Order Pick-Up</a>
+      <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
 
@@ -1128,6 +1185,15 @@
   </footer>
 
   <script>
+    // Mobile menu
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const btn  = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      btn.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
+
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
