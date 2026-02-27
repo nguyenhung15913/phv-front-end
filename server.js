@@ -1,7 +1,5 @@
 /**
  * Pho Huong Viet — Frontend Server
- * Serves the static website (index.html + order.html)
- * Injects RESTAURANT_API_URL into order.html at runtime
  */
 
 require('dotenv').config();
@@ -12,13 +10,14 @@ const fs      = require('fs');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// Set in Railway environment variables
 const API_URL = process.env.RESTAURANT_API_URL || 'http://localhost:3001';
 
-// Serve static files from /public
-app.use(express.static(path.join(__dirname, 'public')));
+// Root → index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
-// Serve order.html with API URL injected
+// order.html → inject API URL
 app.get('/order.html', (req, res) => {
   let html = fs.readFileSync(path.join(__dirname, 'public', 'order.html'), 'utf8');
   html = html.replace('__RESTAURANT_API_URL__', `${API_URL}/api`);
@@ -26,17 +25,15 @@ app.get('/order.html', (req, res) => {
   res.send(html);
 });
 
-// Root serves index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+// Everything else (CSS, JS, images)
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Fallback
+// Fallback → index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`🍜 Pho Huong Viet frontend running on http://localhost:${PORT}`);
+  console.log(`🍜 Frontend running on http://localhost:${PORT}`);
   console.log(`   API URL: ${API_URL}`);
 });
